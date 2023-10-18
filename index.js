@@ -2,7 +2,7 @@
 
 const express=require('express')
 const cors=require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app=express()
 const port=process.env.PORT || 5000;
@@ -36,16 +36,70 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
- const foodAndBeverageCollection=client.db('foodDB').collection('product')
-
+ const foodAndBeverageProduct=client.db('foodDB').collection('product')
+ const myCartAddedProduct=client.db('AddeCartDB').collection('cart')
 
  app.post('/product',async(req,res)=>{
     const product=req.body;
     console.log('Product Posted',product)
-    const result=await foodAndBeverageCollection.insertOne(product)
+    const result=await foodAndBeverageProduct.insertOne(product)
     res.send(result)
  })
 
+ app.get('/product',async(req,res)=>{
+    const cursor=foodAndBeverageProduct.find()
+    const result= await cursor.toArray()
+    res.send(result)
+ }),
+
+
+ app.post('/cart',async(req,res)=>{
+  const cartAdded=req.body;
+  console.log('cart added',cartAdded)
+  const result=await myCartAddedProduct.insertOne(cartAdded)
+  res.send(result)
+
+ });
+
+ app.get('/cart',async(req,res)=>{
+  const cursor=myCartAddedProduct.find()
+  const result= await cursor.toArray()
+  res.send(result)
+ })
+
+
+ app.delete('/cart/:id',async(req,res)=>{
+ const id=req.params.id;
+ const query={_id:new ObjectId(id)}
+ const result=await myCartAddedProduct.deleteOne(query)
+ res.send(result)
+
+ })
+
+//  app.put('/product/:id',async(req,res)=>{
+//   const id=req.params.id;
+//   const filter={_id:new ObjectId(id)}
+//   const options = { upsert: true };
+//   const updateProduct=req.body
+
+//   const updatedProducts={
+//      $set:{
+         
+//       name:updateProduct.name,
+//       image:updateProduct.image,
+//        type:updateProduct.type,
+//        price:updateProduct.price,
+//        rating:updateProduct.rating,
+//       brandName:updateProduct.brandName
+     
+
+
+//      }
+// }
+
+//  const result=await foodAndBeverageProduct.updateOne(filter,updatedProducts,options)
+// res.send(result)
+//  })
 
 
 
