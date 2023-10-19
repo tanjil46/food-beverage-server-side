@@ -74,32 +74,32 @@ async function run() {
  const result=await myCartAddedProduct.deleteOne(query)
  res.send(result)
 
- })
+ });
 
-//  app.put('/product/:id',async(req,res)=>{
-//   const id=req.params.id;
-//   const filter={_id:new ObjectId(id)}
-//   const options = { upsert: true };
-//   const updateProduct=req.body
+ app.put('/update/:id',async(req,res)=>{
+  const id=req.params.id;
+  const filter={_id:new ObjectId(id)}
+  const options = { upsert: true };
+  const updateProduct=req.body
 
-//   const updatedProducts={
-//      $set:{
+  const updatedProducts={
+     $set:{
          
-//       name:updateProduct.name,
-//       image:updateProduct.image,
-//        type:updateProduct.type,
-//        price:updateProduct.price,
-//        rating:updateProduct.rating,
-//       brandName:updateProduct.brandName
+      name:updateProduct.name,
+      image:updateProduct.image,
+       type:updateProduct.type,
+       price:updateProduct.price,
+       rating:updateProduct.rating,
+      brandName:updateProduct.brandName
      
 
 
-//      }
-// }
+     }
+}
 
-//  const result=await foodAndBeverageProduct.updateOne(filter,updatedProducts,options)
-// res.send(result)
-//  })
+ const result=await foodAndBeverageProduct.updateOne(filter,updatedProducts,options)
+res.send(result)
+ })
 
 
 
